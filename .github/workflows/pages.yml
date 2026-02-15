@@ -2,7 +2,7 @@ name: Deploy to GitHub Pages
 
 on:
   push:
-    branches: [ "main" ]
+    branches: ["main"]
   workflow_dispatch:
 
 permissions:
@@ -25,14 +25,12 @@ jobs:
         uses: actions/setup-node@v4
         with:
           node-version: 20
-          cache: npm
-          cache-dependency-path: 3d-portfolio/package-lock.json
 
       - name: Install
         working-directory: 3d-portfolio
         run: npm ci
 
-      - name: Build
+      - name: Build (Next export)
         working-directory: 3d-portfolio
         run: npm run build
 
@@ -42,7 +40,7 @@ jobs:
       - name: Upload artifact
         uses: actions/upload-pages-artifact@v3
         with:
-          path: 3d-portfolio/dist
+          path: 3d-portfolio/out
 
   deploy:
     needs: build

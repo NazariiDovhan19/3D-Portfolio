@@ -32,6 +32,7 @@ export const ChatInput = ({ onSendMessage, onTyping, placeholder = "Message" }: 
           onChange={onTyping}
           onKeyDown={(e) => e.key === "Enter" && handleSend()}
           autoComplete="off"
+          name="chat-message"
         />
         <Button
           size="icon"

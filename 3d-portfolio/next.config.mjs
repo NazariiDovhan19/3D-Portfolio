@@ -9,6 +9,9 @@ const nextConfig = {
 
   basePath: isProd ? `/${repo}` : "",
   assetPrefix: isProd ? `/${repo}/` : "",
+  env: {
+    NEXT_PUBLIC_BASE_PATH: isProd ? `/${repo}` : "",
+  },
 
   eslint: {
     ignoreDuringBuilds: true,

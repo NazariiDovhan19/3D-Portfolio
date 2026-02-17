@@ -104,6 +104,7 @@ export const EditProfileModal = ({
                 "transition-colors",
                 THEME.text.header
               )}
+              autoComplete="nickname"
               autoFocus
               onKeyDown={(e) => {
                 if (e.key === "Enter") handleSave();

@@ -1,138 +1,208 @@
 "use client";
-import Image from "next/image";
+
+
 import React from "react";
-import {
-  Modal,
-  ModalBody,
-  ModalContent,
-  ModalFooter,
-  ModalTrigger,
-} from "../ui/animated-modal";
-import { FloatingDock } from "../ui/floating-dock";
 import Link from "next/link";
+import projects from "@/data/projects";
 
-import SmoothScroll from "../smooth-scroll";
-import projects, { Project } from "@/data/projects";
-import { cn } from "@/lib/utils";
-import { SectionHeader } from "./section-header";
-
-import SectionWrapper from "../ui/section-wrapper";
-
-const ProjectsSection = () => {
-  return (
-    <SectionWrapper id="projects" className="max-w-7xl mx-auto md:h-[130vh]">
-      <SectionHeader id='projects' title="Projects" />
-      <div className="grid grid-cols-1 md:grid-cols-3">
-        {projects.map((project, index) => (
-          <Modall key={project.src} project={project} />
-        ))}
-      </div>
-    </SectionWrapper>
-  );
+type AnyProject = {
+  id?: string;
+  title?: string;
+  name?: string;
+  category?: string;
+  live?: string;
+  link?: string;
+  github?: string;
+  repo?: string;
+  description?: string;
+  content?: React.ReactNode;
+  skills?: { frontend?: any[]; backend?: any[] };
 };
-const Modall = ({ project }: { project: Project }) => {
-  return (
-    <div className="flex items-center justify-center">
-      <Modal>
-        <ModalTrigger className="bg-transparent flex justify-center group/modal-btn">
-          <div
-            className="relative w-[400px] h-auto rounded-lg overflow-hidden"
-            style={{ aspectRatio: "3/2" }}
-          >
-            <Image
-              className="absolute w-full h-full top-0 left-0 hover:scale-[1.05] transition-all"
-              src={project.src}
-              alt={project.title}
-              width={300}
-              height={300}
-            />
-            <div className="absolute w-full h-1/2 bottom-0 left-0 bg-gradient-to-t from-black via-black/85 to-transparent pointer-events-none">
-              <div className="flex flex-col h-full items-start justify-end p-6">
-                <div className="text-lg text-left">{project.title}</div>
-                <div className="text-xs bg-white text-black rounded-lg w-fit px-2">
-                  {project.category}
-                </div>
-              </div>
-            </div>
-          </div>
-        </ModalTrigger>
-        <ModalBody className="md:max-w-4xl md:max-h-[80%] overflow-auto">
-          <SmoothScroll isInsideModal={true}>
-            <ModalContent>
-              <ProjectContents project={project} />
-            </ModalContent>
-          </SmoothScroll>
-          <ModalFooter className="gap-4">
-            <button className="px-2 py-1 bg-gray-200 text-black dark:bg-black dark:border-black dark:text-white border border-gray-300 rounded-md text-sm w-28">
-              Cancel
-            </button>
-            <Link href={project.live} target="_blank">
-              <button className="bg-black text-white dark:bg-white dark:text-black text-sm px-2 py-1 rounded-md border border-black w-28">
-                Visit
-              </button>
-            </Link>
-          </ModalFooter>
-        </ModalBody>
-      </Modal>
-    </div>
-  );
-};
-export default ProjectsSection;
 
-const ProjectContents = ({ project }: { project: Project }) => {
+type ProjectView = {
+  id: string;
+  title: string;
+  category: string;
+  live: string;
+  github: string;
+  summary: React.ReactNode;
+  tags: string[];
+  impact: string[];
+};
+
+function Chip({ children }: { children: React.ReactNode }) {
   return (
-    <>
-      <h4 className="text-lg md:text-2xl text-neutral-600 dark:text-neutral-100 font-bold text-center mb-8">
-        {project.title}
-      </h4>
-      <div className="flex flex-col md:flex-row md:justify-evenly max-w-screen overflow-hidden md:overflow-visible">
-        <div className="flex flex-row md:flex-col-reverse justify-center items-center gap-2 text-3xl mb-8">
-          <p className="text-sm mt-1 text-neutral-600 dark:text-neutral-500">
-            Frontend
+    <span className="inline-flex items-center rounded-full bg-zinc-100/10 px-2 py-0.5 text-[11px] text-zinc-200 border border-zinc-600/60">
+      {children}
+    </span>
+  );
+}
+
+
+function Tag({ children }: { children: React.ReactNode }) {
+  return (
+    <span className="inline-flex items-center rounded-md bg-zinc-900/40 px-2 py-1 text-[11px] text-zinc-200 border border-zinc-700/70">
+      {children}
+
+    </span>
+  );
+}
+
+
+function ActionLink({ href, label }: { href: string; label: string }) {
+  return (
+    <Link
+      href={href}
+      target="_blank"
+      rel="noopener noreferrer"
+      className="inline-flex items-center justify-center rounded-md border border-zinc-600 px-3 py-2 text-sm text-zinc-200 hover:border-zinc-200 transition"
+    >
+      {label}
+      <span className="ml-2">↗</span>
+    </Link>
+  );
+}
+
+function safeTextFromNode(node: React.ReactNode): string {
+  if (!node) return "";
+  if (typeof node === "string") return node;
+  return "";
+}
+
+export default function ProjectsSection() {
+  const raw = projects as unknown as AnyProject[];
+
+  // Default tags and "impact" lines (data-analyst style). You can tweak later.
+  const defaults: Record<string, { tags: string[]; impact: string[] }> = {
+    "colab-sales-analysis": {
+      tags: ["Python", "EDA", "KPIs", "Data Cleaning", "Visualization"],
+      impact: [
+        "Built KPI set for revenue, AOV, and conversion tracking",
+        "Identified top products and regions driving sales changes",
+      ],
+    },
+    "colab-customer-segmentation": {
+      tags: ["Python", "RFM", "Clustering", "Segmentation"],
+      impact: [
+        "Created customer cohorts for targeted retention campaigns",
+        "Flagged high value and churn risk segments for action",
+      ],
+    },
+    "colab-cohort-retention": {
+      tags: ["SQL", "Cohorts", "Funnels", "Retention"],
+      impact: [
+        "Measured activation and drop off across funnel steps",
+        "Built cohort retention view to track product health",
+      ],
+    },
+    "colab-ab-testing": {
+      tags: ["Python", "Statistics", "A/B Testing", "Decision Making"],
+      impact: [
+        "Standardized testing workflow with clear ship or dont ship output",
+        "Computed confidence intervals and practical interpretation",
+      ],
+    },
+    "colab-forecasting": {
+      tags: ["Python", "Time Series", "Forecasting", "Evaluation"],
+      impact: [
+        "Built baseline forecasting and compared model performance",
+        "Improved planning with seasonality and trend signals",
+      ],
+    },
+    "colab-data-quality": {
+      tags: ["Python", "Data Quality", "Validation", "Pipeline"],
+      impact: [
+        "Reusable cleaning pipeline with checks and rules",
+        "Reduced errors from missing values and duplicates",
+      ],
+    },
+  };
+
+  const list: ProjectView[] = raw.map((p) => {
+    const id = p.id ?? String(Math.random());
+    const title = p.title ?? p.name ?? "Untitled Project";
+    const category = p.category ?? "Project";
+    const live = p.live ?? p.link ?? "";
+    const github = p.github ?? p.repo ?? "";
+
+    const summary =
+      p.content ??
+      (p.description ? (
+        <p className="text-xs text-zinc-400 leading-relaxed">{p.description}</p>
+      ) : (
+        <p className="text-xs text-zinc-500 leading-relaxed">
+          Short case study with goals, method, and insights.
+        </p>
+      ));
+
+    const def = defaults[id] ?? { tags: ["Python", "SQL", "Analytics"], impact: [] };
+
+    return {
+      id,
+      title,
+      category,
+      live,
+      github,
+      summary,
+      tags: def.tags,
+      impact: def.impact,
+    };
+  });
+
+
+  return (
+    <section id="projects" className="w-full">
+      <div className="container mx-auto md:px-[50px] xl:px-[150px] text-zinc-300">
+        <div className="mt-[100px] mb-[50px]">
+          <h2 className="text-4xl">Selected Analytics Projects</h2>
+          <p className="mt-3 text-sm text-zinc-400 max-w-2xl">
+            End to end notebooks and case studies focused on decision making: KPIs, segmentation,
+            retention, experimentation, forecasting, and data quality.
+
+
           </p>
-          {project.skills.frontend?.length > 0 && (
-            <FloatingDock items={project.skills.frontend} />
-          )}
         </div>
-        {project.skills.backend?.length > 0 && (
-          <div className="flex flex-row md:flex-col-reverse justify-center items-center gap-2 text-3xl mb-8">
-            <p className="text-sm mt-1 text-neutral-600 dark:text-neutral-500">
-              Backend
-            </p>
-            <FloatingDock items={project.skills.backend} />
-          </div>
-        )}
+
+        <ul className="grid md:grid-cols-2 lg:grid-cols-3 gap-10 place-content-around">
+          {list.map((project) => (
+            <li
+              key={project.id}
+              className="w-[300px] min-h-[320px] border-[.5px] rounded-md border-zinc-600 p-5 flex flex-col justify-between"
+              style={{ backdropFilter: "blur(2px)" }}
+            >
+              <div className="space-y-3">
+                <div className="flex items-start justify-between gap-3">
+                  <h3 className="text-lg leading-snug">{project.title}</h3>
+                </div>
+
+                <div className="flex flex-wrap gap-2">
+                  <Chip>{project.category}</Chip>
+                </div>
+
+                <div>{project.summary}</div>
+
+                <div className="flex flex-wrap gap-2 pt-2">
+                  {project.tags.map((t) => (
+                    <Tag key={t}>{t}</Tag>
+                  ))}
+                </div>
+
+                {project.impact.length > 0 ? (
+                  <ul className="pt-2 list-disc pl-5 text-[12px] text-zinc-400 space-y-1">
+                    {project.impact.map((line) => (
+                      <li key={line}>{line}</li>
+                    ))}
+                  </ul>
+                ) : null}
+              </div>
+
+              
+            </li>
+          ))}
+        </ul>
       </div>
-      {/* <div className="flex justify-center items-center">
-        {project.screenshots.map((image, idx) => (
-          <motion.div
-            key={"images" + idx}
-            style={{
-              rotate: Math.random() * 20 - 10,
-            }}
-            whileHover={{
-              scale: 1.1,
-              rotate: 0,
-              zIndex: 100,
-            }}
-            whileTap={{
-              scale: 1.1,
-              rotate: 0,
-              zIndex: 100,
-            }}
-            className="rounded-xl -mr-4 mt-4 p-1 bg-white dark:bg-neutral-800 dark:border-neutral-700 border border-neutral-100 flex-shrink-0 overflow-hidden"
-          >
-            <Image
-              src={`${project.src.split("1.png")[0]}${image}`}
-              alt="screenshots"
-              width="500"
-              height="500"
-              className="rounded-lg h-20 w-20 md:h-40 md:w-40 object-cover flex-shrink-0"
-            />
-          </motion.div>
-        ))}
-      </div> */}
-      {project.content}
-    </>
+
+    </section>
   );
-};
+
+}

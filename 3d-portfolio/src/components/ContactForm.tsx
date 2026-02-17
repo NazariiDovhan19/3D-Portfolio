@@ -70,6 +70,7 @@ const ContactForm = () => {
             id="fullname"
             placeholder="Your Name"
             type="text"
+            autoComplete="name"
             required
             value={fullName}
             onChange={(e) => setFullName(e.target.value)}
@@ -81,6 +82,7 @@ const ContactForm = () => {
             id="email"
             placeholder="you@example.com"
             type="email"
+            autoComplete="email"
             required
             value={email}
             onChange={(e) => setEmail(e.target.value)}
@@ -92,6 +94,7 @@ const ContactForm = () => {
         <Textarea
           placeholder="Tell me about about your project,"
           id="content"
+          autoComplete="off"
           required
           value={message}
           onChange={(e) => setMessage(e.target.value)}

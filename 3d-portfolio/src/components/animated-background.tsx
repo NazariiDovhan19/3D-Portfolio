@@ -427,16 +427,17 @@ const AnimatedBackground = () => {
 
   return (
     <Suspense fallback={<div>Loading...</div>}>
-      <Spline
-        className="w-full h-full fixed"
-        ref={splineContainer}
-        onLoad={(app: Application) => {
-          setSplineApp(app);
-          bypassLoading();
-        }}
-        scene="/assets/skills-keyboard.spline"
-      />
-    </Suspense>
+  <Spline
+    className="w-full h-full fixed"
+    ref={splineContainer}
+    onLoad={(app: Application) => {
+      setSplineApp(app);
+      bypassLoading();
+    }}
+    scene="/3D-Portfolio/assets/skills-keyboard.spline"
+  />
+</Suspense>
+
   );
 };
 

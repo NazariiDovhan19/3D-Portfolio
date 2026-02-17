@@ -1,14 +1,18 @@
 /** @type {import('next').NextConfig} */
 const repo = "3D-Portfolio";
-const isProd = process.env.NODE_ENV === "production";
+const isGhPages = process.env.GITHUB_ACTIONS === "true";
 
 const nextConfig = {
   output: "export",
   images: { unoptimized: true },
   trailingSlash: true,
 
-  basePath: isProd ? `/${repo}` : "",
-  assetPrefix: isProd ? `/${repo}/` : "",
+  basePath: isGhPages ? `/${repo}` : "",
+  assetPrefix: isGhPages ? `/${repo}/` : "",
+
+  env: {
+    NEXT_PUBLIC_BASE_PATH: isGhPages ? `/${repo}` : "",
+  },
 
   eslint: {
     ignoreDuringBuilds: true,

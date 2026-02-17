@@ -1,15 +1,11 @@
 import { useCallback, useEffect, useRef } from "react";
+import { withBasePath } from "@/lib/base-path";
 
 export const useSounds = () => {
   const audioContextRef = useRef<AudioContext | null>(null);
   const pressBufferRef = useRef<AudioBuffer | null>(null);
   const releaseBufferRef = useRef<AudioBuffer | null>(null);
   const startedRef = useRef(false);
-
-  const getBase = () => {
-    // працює і для GH Pages, і локально
-    return window.location.pathname.startsWith("/3D-Portfolio") ? "/3D-Portfolio" : "";
-  };
 
   const ensureContext = () => {
     const AudioContextCtor = window.AudioContext || (window as any).webkitAudioContext;
@@ -37,16 +33,14 @@ export const useSounds = () => {
       const ctx = ensureContext();
       if (!ctx) return;
 
-      const base = getBase();
-
       try {
-        pressBufferRef.current = await decodeMp3(`${base}/assets/keycap-sounds/press.mp3`, ctx);
+        pressBufferRef.current = await decodeMp3(withBasePath("/assets/keycap-sounds/press.mp3"), ctx);
       } catch (e) {
         console.error("Failed to decode press.mp3", e);
       }
 
       try {
-        releaseBufferRef.current = await decodeMp3(`${base}/assets/keycap-sounds/release.mp3`, ctx);
+        releaseBufferRef.current = await decodeMp3(withBasePath("/assets/keycap-sounds/release.mp3"), ctx);
       } catch (e) {
         console.error("Failed to decode release.mp3", e);
       }

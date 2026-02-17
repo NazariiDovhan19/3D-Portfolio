@@ -5,6 +5,7 @@ import gsap from "gsap";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
 const Spline = React.lazy(() => import("@splinetool/react-spline"));
 import { Skill, SkillNames, SKILLS } from "@/data/constants";
+import { withBasePath } from "@/lib/base-path";
 import { sleep } from "@/lib/utils";
 import { useMediaQuery } from "@/hooks/use-media-query";
 import { usePreloader } from "./preloader";
@@ -434,7 +435,7 @@ const AnimatedBackground = () => {
           setSplineApp(app);
           bypassLoading();
         }}
-        scene="/assets/skills-keyboard.spline"
+        scene={withBasePath("/assets/skills-keyboard.spline")}
       />
     </Suspense>
   );

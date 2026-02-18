@@ -428,7 +428,7 @@ const AnimatedBackground = () => {
   return (
     <Suspense fallback={<div>Loading...</div>}>
   <Spline
-    className="fixed inset-0 w-full h-full -z-10 pointer-events-none"
+    className="fixed inset-0 w-full h-full -z-10 "
     ref={splineContainer}
     onLoad={(app: Application) => {
       setSplineApp(app);

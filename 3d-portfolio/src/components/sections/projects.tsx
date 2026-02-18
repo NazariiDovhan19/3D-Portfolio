@@ -151,17 +151,16 @@ export default function ProjectsSection() {
 
 
   return (
-    <section id="projects" className="w-full">
-      <div className="container mx-auto md:px-[50px] xl:px-[150px] text-zinc-300">
-        <div className="mt-[100px] mb-[50px]">
-          <h2 className="text-4xl">Selected Analytics Projects</h2>
-          <p className="mt-3 text-sm text-zinc-400 max-w-2xl">
-            End to end notebooks and case studies focused on decision making: KPIs, segmentation,
-            retention, experimentation, forecasting, and data quality.
+    <section id="projects" className="w-full relative z-20">
+  <div className="container mx-auto md:px-[50px] xl:px-[150px] text-zinc-300">
+    <div className="mt-[100px] mb-[50px]">
+      <h2 className="text-4xl">Selected Analytics Projects</h2>
+      <p className="mt-3 text-sm text-zinc-400 max-w-2xl">
+        End to end notebooks and case studies focused on decision making: KPIs, segmentation,
+        retention, experimentation, forecasting, and data quality.
+      </p>
+    </div>
 
-
-          </p>
-        </div>
 
         <ul className="grid md:grid-cols-2 lg:grid-cols-3 gap-10 place-content-around">
           {list.map((project) => (

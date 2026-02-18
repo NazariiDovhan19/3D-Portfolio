@@ -1,6 +1,5 @@
 "use client";
 
-
 import React from "react";
 import Link from "next/link";
 import projects from "@/data/projects";
@@ -32,22 +31,19 @@ type ProjectView = {
 
 function Chip({ children }: { children: React.ReactNode }) {
   return (
-    <span className="inline-flex items-center rounded-full bg-zinc-100/10 px-2 py-0.5 text-[11px] text-zinc-200 border border-zinc-600/60">
+    <span className="inline-flex items-center rounded-full bg-white/5 px-2 py-0.5 text-[11px] text-zinc-300 border border-white/10">
       {children}
     </span>
   );
 }
-
 
 function Tag({ children }: { children: React.ReactNode }) {
   return (
-    <span className="inline-flex items-center rounded-md bg-zinc-900/40 px-2 py-1 text-[11px] text-zinc-200 border border-zinc-700/70">
+    <span className="inline-flex items-center rounded-md bg-white/5 px-2 py-1 text-[11px] text-zinc-300 border border-white/10">
       {children}
-
     </span>
   );
 }
-
 
 function ActionLink({ href, label }: { href: string; label: string }) {
   return (
@@ -55,7 +51,7 @@ function ActionLink({ href, label }: { href: string; label: string }) {
       href={href}
       target="_blank"
       rel="noopener noreferrer"
-      className="inline-flex items-center justify-center rounded-md border border-zinc-600 px-3 py-2 text-sm text-zinc-200 hover:border-zinc-200 transition"
+      className="inline-flex items-center justify-center rounded-md border border-white/10 bg-white/5 px-3 py-2 text-sm text-zinc-200 hover:border-white/20 hover:bg-white/10 transition"
     >
       {label}
       <span className="ml-2">↗</span>
@@ -63,16 +59,9 @@ function ActionLink({ href, label }: { href: string; label: string }) {
   );
 }
 
-function safeTextFromNode(node: React.ReactNode): string {
-  if (!node) return "";
-  if (typeof node === "string") return node;
-  return "";
-}
-
 export default function ProjectsSection() {
   const raw = projects as unknown as AnyProject[];
 
-  // Default tags and "impact" lines (data-analyst style). You can tweak later.
   const defaults: Record<string, { tags: string[]; impact: string[] }> = {
     "colab-sales-analysis": {
       tags: ["Python", "EDA", "KPIs", "Data Cleaning", "Visualization"],
@@ -128,9 +117,9 @@ export default function ProjectsSection() {
     const summary =
       p.content ??
       (p.description ? (
-        <p className="text-xs text-zinc-400 leading-relaxed">{p.description}</p>
+        <p className="text-base text-zinc-300 leading-relaxed">{p.description}</p>
       ) : (
-        <p className="text-xs text-zinc-500 leading-relaxed">
+        <p className="text-base text-zinc-300 leading-relaxed">
           Short case study with goals, method, and insights.
         </p>
       ));
@@ -149,36 +138,45 @@ export default function ProjectsSection() {
     };
   });
 
-
   return (
     <section id="projects" className="w-full relative z-20">
-  <div className="container mx-auto md:px-[50px] xl:px-[150px] text-zinc-300">
-    <div className="mt-[100px] mb-[50px]">
-      <h2 className="text-4xl">Selected Analytics Projects</h2>
-      <p className="mt-3 text-sm text-zinc-400 max-w-2xl">
-        End to end notebooks and case studies focused on decision making: KPIs, segmentation,
-        retention, experimentation, forecasting, and data quality.
-      </p>
-    </div>
-
+      <div className="container mx-auto md:px-[50px] xl:px-[150px] text-zinc-100">
+        <div className="mt-[100px] mb-[50px]">
+          <h2 className="text-4xl font-bold tracking-tight">Selected Analytics Projects</h2>
+          <p className="mt-3 text-sm text-zinc-300 max-w-2xl">
+            End to end notebooks and case studies focused on decision making: KPIs, segmentation,
+            retention, experimentation, forecasting, and data quality.
+          </p>
+        </div>
 
         <ul className="grid md:grid-cols-2 lg:grid-cols-3 gap-10 place-content-around">
           {list.map((project) => (
             <li
               key={project.id}
-              className="w-[300px] min-h-[320px] border-[.5px] rounded-md border-zinc-600 p-5 flex flex-col justify-between"
-              style={{ backdropFilter: "blur(2px)" }}
+              className={[
+                "w-[300px] min-h-[320px] p-5 flex flex-col justify-between",
+                "rounded-2xl",
+                "bg-gradient-to-br from-zinc-950/90 to-zinc-900/60",
+                "backdrop-blur-sm",
+                "border border-white/10",
+                "shadow-sm hover:shadow-md",
+                "hover:border-primary/20 transition-colors duration-300",
+              ].join(" ")}
             >
-              <div className="space-y-3">
+              <div className="space-y-4">
                 <div className="flex items-start justify-between gap-3">
-                  <h3 className="text-lg leading-snug">{project.title}</h3>
+                  <h3 className="text-xl font-bold tracking-tight text-zinc-50">
+                    {project.title}
+                  </h3>
                 </div>
 
                 <div className="flex flex-wrap gap-2">
                   <Chip>{project.category}</Chip>
                 </div>
 
-                <div>{project.summary}</div>
+                <div className="text-base text-zinc-300 leading-relaxed">
+                  {project.summary}
+                </div>
 
                 <div className="flex flex-wrap gap-2 pt-2">
                   {project.tags.map((t) => (
@@ -187,22 +185,24 @@ export default function ProjectsSection() {
                 </div>
 
                 {project.impact.length > 0 ? (
-                  <ul className="pt-2 list-disc pl-5 text-[12px] text-zinc-700 dark:text-zinc-300 space-y-1">
-
+                  <ul className="pt-2 list-disc list-outside ml-4 text-base text-zinc-300 space-y-2 leading-relaxed">
                     {project.impact.map((line) => (
                       <li key={line}>{line}</li>
                     ))}
                   </ul>
                 ) : null}
-              </div>
 
-              
+                {(project.live || project.github) ? (
+                  <div className="flex flex-wrap gap-2 pt-2">
+                    {project.live ? <ActionLink href={project.live} label="Visit" /> : null}
+                    {project.github ? <ActionLink href={project.github} label="GitHub" /> : null}
+                  </div>
+                ) : null}
+              </div>
             </li>
           ))}
         </ul>
       </div>
-
     </section>
   );
-
 }

@@ -428,7 +428,7 @@ const AnimatedBackground = () => {
   return (
     <Suspense fallback={<div>Loading...</div>}>
   <Spline
-    className="w-full h-full fixed"
+    className="fixed inset-0 w-full h-full -z-10 pointer-events-none"
     ref={splineContainer}
     onLoad={(app: Application) => {
       setSplineApp(app);
@@ -437,6 +437,7 @@ const AnimatedBackground = () => {
     scene="/3D-Portfolio/assets/skills-keyboard.spline"
   />
 </Suspense>
+
 
   );
 };

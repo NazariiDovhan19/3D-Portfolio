@@ -10,6 +10,8 @@ import { useToast } from "./ui/use-toast";
 import { Button } from "./ui/button";
 import { useRouter } from "next/navigation";
 
+const FORMSPREE_ENDPOINT = "https://formspree.io/f/mgolzyog";
+
 const ContactForm = () => {
   const [fullName, setFullName] = React.useState("");
   const [email, setEmail] = React.useState("");
@@ -24,12 +26,13 @@ const ContactForm = () => {
     setLoading(true);
 
     try {
-      const res = await fetch("https://formspree.io/f/mgolzyog", {
+      // FormData з форми (інколи кастомні input не передають name — тому нижче є hidden поля)
+      const formData = new FormData(e.currentTarget);
+
+      const res = await fetch(FORMSPREE_ENDPOINT, {
         method: "POST",
-        headers: {
-          Accept: "application/json",
-        },
-        body: new FormData(e.currentTarget),
+        headers: { Accept: "application/json" },
+        body: formData,
       });
 
       const data = await res.json().catch(() => null);
@@ -37,7 +40,7 @@ const ContactForm = () => {
       if (!res.ok) {
         const msg =
           data?.errors?.[0]?.message ||
-          "Something went wrong! Please check the fields.";
+          `Formspree error (${res.status}). Check fields / activation.`;
         throw new Error(msg);
       }
 
@@ -75,12 +78,19 @@ const ContactForm = () => {
 
   return (
     <form className="min-w-7xl mx-auto sm:mt-4" onSubmit={handleSubmit}>
+      {/* ✅ ФІКС: навіть якщо ace-input/ace-textarea не передають name в DOM, ці поля точно відправляться */}
+      <input type="hidden" name="fullName" value={fullName} />
+      <input type="hidden" name="email" value={email} />
+      <input type="hidden" name="message" value={message} />
+
+      {/* антиспам */}
+      <input type="text" name="_gotcha" className="hidden" />
+
       <div className="flex flex-col md:flex-row space-y-2 md:space-y-0 md:space-x-2 mb-4">
         <LabelInputContainer>
           <Label htmlFor="fullname">Full name</Label>
           <Input
             id="fullname"
-            name="fullName"
             placeholder="Your Name"
             type="text"
             required
@@ -93,7 +103,6 @@ const ContactForm = () => {
           <Label htmlFor="email">Email Address</Label>
           <Input
             id="email"
-            name="email"
             placeholder="you@example.com"
             type="email"
             required
@@ -106,9 +115,8 @@ const ContactForm = () => {
       <div className="grid w-full gap-1.5 mb-4">
         <Label htmlFor="content">Your Message</Label>
         <Textarea
-          id="content"
-          name="message"
           placeholder="Tell me about your project"
+          id="content"
           required
           value={message}
           onChange={(e) => setMessage(e.target.value)}
@@ -117,9 +125,6 @@ const ContactForm = () => {
           I&apos;ll never share your data with anyone else. Pinky promise!
         </p>
       </div>
-
-      {/* Anti-spam honeypot */}
-      <input type="text" name="_gotcha" className="hidden" />
 
       <Button
         disabled={loading}

@@ -33,7 +33,7 @@ type ProjectView = {
 
 function Chip({ children }: { children: React.ReactNode }) {
   return (
-    <span className="inline-flex items-center rounded-full bg-secondary/30 px-2 py-0.5 text-[11px] text-muted-foreground border border-border">
+    <span className="inline-flex items-center rounded-full bg-white/5 px-2 py-0.5 text-[11px] text-zinc-300 border border-white/10">
       {children}
     </span>
   );
@@ -41,7 +41,7 @@ function Chip({ children }: { children: React.ReactNode }) {
 
 function Tag({ children }: { children: React.ReactNode }) {
   return (
-    <span className="inline-flex items-center rounded-md bg-secondary/30 px-2 py-1 text-[11px] text-muted-foreground border border-border">
+    <span className="inline-flex items-center rounded-md bg-white/5 px-2 py-1 text-[11px] text-zinc-300 border border-white/10">
       {children}
     </span>
   );
@@ -53,7 +53,7 @@ function ActionLink({ href, label }: { href: string; label: string }) {
       href={href}
       target="_blank"
       rel="noopener noreferrer"
-      className="inline-flex items-center justify-center rounded-md border border-border px-3 py-2 text-sm text-foreground hover:border-primary/40 transition"
+      className="inline-flex items-center justify-center rounded-md border border-white/10 bg-white/5 px-3 py-2 text-sm text-zinc-200 hover:border-white/20 hover:bg-white/10 transition"
     >
       {label}
       <span className="ml-2">↗</span>
@@ -119,11 +119,9 @@ export default function ProjectsSection() {
     const summary =
       p.content ??
       (p.description ? (
-        <p className="text-xs text-muted-foreground leading-relaxed">
-          {p.description}
-        </p>
+        <p className="text-base text-zinc-300 leading-relaxed">{p.description}</p>
       ) : (
-        <p className="text-xs text-muted-foreground leading-relaxed">
+        <p className="text-base text-zinc-300 leading-relaxed">
           Short case study with goals, method, and insights.
         </p>
       ));
@@ -144,10 +142,10 @@ export default function ProjectsSection() {
 
   return (
     <section id="projects" className="w-full relative z-20">
-      <div className="container mx-auto md:px-[50px] xl:px-[150px] text-foreground">
+      <div className="container mx-auto md:px-[50px] xl:px-[150px] text-zinc-100">
         <div className="mt-[100px] mb-[50px]">
-          <h2 className="text-4xl">Selected Analytics Projects</h2>
-          <p className="mt-3 text-sm text-muted-foreground max-w-2xl">
+          <h2 className="text-4xl font-bold tracking-tight">Selected Analytics Projects</h2>
+          <p className="mt-3 text-sm text-zinc-300 max-w-2xl">
             End to end notebooks and case studies focused on decision making: KPIs, segmentation,
             retention, experimentation, forecasting, and data quality.
           </p>
@@ -158,15 +156,17 @@ export default function ProjectsSection() {
             <li key={project.id} className="w-[300px]">
               <Card
                 className={cn(
-                  "bg-card text-card-foreground border-border",
-                  "hover:border-primary/20 transition-colors duration-300",
+                  "min-h-[320px] rounded-2xl",
+                  "bg-gradient-to-br from-zinc-950/90 to-zinc-900/60",
+                  "backdrop-blur-sm",
+                  "border border-white/10",
                   "shadow-sm hover:shadow-md",
-                  "min-h-[320px] rounded-xl"
+                  "hover:border-primary/20 transition-colors duration-300"
                 )}
               >
                 <CardHeader className="pb-3">
                   <div className="flex items-start justify-between gap-3">
-                    <CardTitle className="text-lg leading-snug">
+                    <CardTitle className="text-xl font-bold tracking-tight text-zinc-50">
                       {project.title}
                     </CardTitle>
                   </div>
@@ -177,7 +177,9 @@ export default function ProjectsSection() {
                 </CardHeader>
 
                 <CardContent className="space-y-4">
-                  <div>{project.summary}</div>
+                  <div className="text-base text-zinc-300 leading-relaxed">
+                    {project.summary}
+                  </div>
 
                   <div className="flex flex-wrap gap-2">
                     {project.tags.map((t) => (
@@ -186,7 +188,7 @@ export default function ProjectsSection() {
                   </div>
 
                   {project.impact.length > 0 ? (
-                    <ul className="list-disc list-outside ml-4 space-y-2 text-[12px] text-muted-foreground leading-relaxed">
+                    <ul className="list-disc list-outside ml-4 space-y-2 text-base text-zinc-300 leading-relaxed">
                       {project.impact.map((line) => (
                         <li key={line}>{line}</li>
                       ))}
@@ -195,12 +197,8 @@ export default function ProjectsSection() {
 
                   {(project.live || project.github) && (
                     <div className="flex flex-wrap gap-2 pt-2">
-                      {project.live ? (
-                        <ActionLink href={project.live} label="Live" />
-                      ) : null}
-                      {project.github ? (
-                        <ActionLink href={project.github} label="GitHub" />
-                      ) : null}
+                      {project.live ? <ActionLink href={project.live} label="Visit" /> : null}
+                      {project.github ? <ActionLink href={project.github} label="GitHub" /> : null}
                     </div>
                   )}
                 </CardContent>

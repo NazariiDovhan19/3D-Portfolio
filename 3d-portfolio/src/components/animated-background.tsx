@@ -425,21 +425,24 @@ const AnimatedBackground = () => {
     updateKeyboardTransform();
   }, [splineApp, isLoading, activeSection]);
 
-  return (
-    <Suspense fallback={<div>Loading...</div>}>
-  <Spline
-    className="fixed inset-0 w-full h-full -z-0 "
-    ref={splineContainer}
-    onLoad={(app: Application) => {
-      setSplineApp(app);
-      bypassLoading();
-    }}
-    scene="/3D-Portfolio/assets/skills-keyboard.spline"
-  />
-</Suspense>
+  const interactive =
+  activeSection === "hero" || activeSection === "skills";
 
-
-  );
+return (
+  <Suspense fallback={<div>Loading...</div>}>
+    <Spline
+      className={`fixed inset-0 w-full h-full z-0 ${
+        interactive ? "pointer-events-auto" : "pointer-events-none"
+      }`}
+      ref={splineContainer}
+      onLoad={(app: Application) => {
+        setSplineApp(app);
+        bypassLoading();
+      }}
+      scene="/3D-Portfolio/assets/skills-keyboard.spline"
+    />
+  </Suspense>
+);
 };
 
 export default AnimatedBackground;

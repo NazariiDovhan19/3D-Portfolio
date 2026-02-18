@@ -187,7 +187,8 @@ export default function ProjectsSection() {
                 </div>
 
                 {project.impact.length > 0 ? (
-                  <ul className="pt-2 list-disc pl-5 text-[12px] text-zinc-400 space-y-1">
+                  <ul className="pt-2 list-disc pl-5 text-[12px] text-zinc-700 dark:text-zinc-300 space-y-1">
+
                     {project.impact.map((line) => (
                       <li key={line}>{line}</li>
                     ))}

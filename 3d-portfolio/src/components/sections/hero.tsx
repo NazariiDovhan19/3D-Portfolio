@@ -51,7 +51,8 @@ const HeroSection = () => {
                       <h1
                         className={cn(
                           "-ml-[6px] leading-none font-thin text-transparent text-slate-800 text-left",
-                          "font-thin text-7xl md:text-7xl lg:text-8xl xl:text-9xl",
+                          "font-thin text-6xl md:text-6xl lg:text-7xl xl:text-8xl",
+
                           "cursor-default text-edge-outline font-display "
                         )}
                       >

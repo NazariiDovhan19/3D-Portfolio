@@ -2,17 +2,18 @@ export type Section = "hero" | "about" | "skills" | "experience" | "projects" | 
 
 export const STATES = {
   hero: {
-    desktop: {
-      scale: { x: 0.20, y: 0.20, z: 0.20 },
-      position: { x: 225, y: -100, z: 0 },
-      rotation: { x: 0, y: 0, z: 0 },
-    },
-    mobile: {
-      scale: { x: 0.30, y: 0.30, z: 0.30 },
-      position: { x: 0, y: -200, z: 0 },
-      rotation: { x: 0, y: 0, z: 0 },
-    },
+  desktop: {
+    scale: { x: 0.16, y: 0.16, z: 0.16 },
+    position: { x: 360, y: -140, z: 0 },
+    rotation: { x: 0, y: 0, z: 0 },
   },
+  mobile: {
+    scale: { x: 0.22, y: 0.22, z: 0.22 },
+    position: { x: 0, y: -220, z: 0 },
+    rotation: { x: 0, y: 0, z: 0 },
+  },
+},
+
   about: {
     desktop: {
       scale: { x: 0.4, y: 0.4, z: 0.4 },

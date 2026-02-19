@@ -21,7 +21,8 @@ const HeroSection = () => {
 
   return (
     <SectionWrapper id="hero" className={cn("relative w-full h-screen")}>
-      <div className="grid md:grid-cols-2">
+      <div className="grid md:grid-cols-[1fr_1.2fr] items-center">
+
         <div
           className={cn(
             "h-[calc(100dvh-3rem)] md:h-[calc(100dvh-4rem)] z-[2]",

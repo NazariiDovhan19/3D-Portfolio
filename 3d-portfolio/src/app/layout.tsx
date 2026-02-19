@@ -3,7 +3,7 @@ import { Inter, Archivo_Black } from "next/font/google";
 import "./globals.css";
 import { config } from "@/data/config";
 
-import Header from "@/components/header/header";
+//import Header from "@/components/header/header";
 import Footer from "@/components/footer/footer";
 import Script from "next/script";
 import AppOverlays from "@/components/app-overlays";
@@ -67,8 +67,9 @@ export default function RootLayout({
         {/* <Analytics /> */}
       </head>
       <body>
+        //тут має бути Header на пустому місці
         <Providers>
-          <Header />
+          
           {children}
           <Footer />
           <AppOverlays />
